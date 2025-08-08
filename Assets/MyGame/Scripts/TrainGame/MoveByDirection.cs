@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MoveByDirection : MonoBehaviour
+public class MoveByDirection : MonoBehaviour // этот скрипт висит на объекте-перевозчике, на которого прицепл€ют все объекты которые должны двигатс€
 {
     public Vector3 MoveDirection;
     public float MoveSpeed;
@@ -10,9 +10,7 @@ public class MoveByDirection : MonoBehaviour
     {
         if(TrueSpeed != MoveSpeed)
         {
-            //TrueSpeed += (MoveSpeed - TrueSpeed);
-            TrueSpeed = Mathf.Lerp(TrueSpeed, MoveSpeed, SpeedChange);
-            Debug.Log(TrueSpeed);
+            TrueSpeed = Mathf.Lerp(TrueSpeed, MoveSpeed, SpeedChange); // дл€ плавного старта движени€
         }
         transform.Translate(MoveDirection * TrueSpeed * Time.deltaTime);
     }

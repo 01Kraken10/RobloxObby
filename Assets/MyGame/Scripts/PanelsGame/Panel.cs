@@ -1,19 +1,21 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Panel : MonoBehaviour
+public class Panel : MonoBehaviour // Этот скрипт висит на каждой панели
 {
-    public bool IsDeadly;
-    public Material DeadlyMat, SafeMat;
+    public bool IsDeadly; // опасна ли панель
+    public Material DeadlyMat, SafeMat; // материалы для опасной и безопасной панелей
 
     MeshRenderer meshRenderer;
+
     private void Awake()
     {
-        meshRenderer = GetComponent<MeshRenderer>();
+        meshRenderer = GetComponent<MeshRenderer>(); // кэшируем рендерер
     }
 
     public void Setup(Material deadMat, Material safeMat, bool isDeadly)
     {
+        // задаем материалы и тип панели
         DeadlyMat = deadMat;
         SafeMat = safeMat;
         IsDeadly = isDeadly;
@@ -25,12 +27,12 @@ public class Panel : MonoBehaviour
         {
             if (IsDeadly)
             {
-                meshRenderer.material = DeadlyMat;
+                meshRenderer.material = DeadlyMat; // ставим материал и респавним
                 other.gameObject.GetComponent<Respawn>().DoRespawn();
             }
             else
             {
-                meshRenderer.material = SafeMat;
+                meshRenderer.material = SafeMat; // просто меняем материал
             }
         }
     }

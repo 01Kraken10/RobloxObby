@@ -4,40 +4,41 @@ using System.Collections;
 
 public class ObstacleManager : MonoBehaviour
 {
-    public GameObject LeftObstacle, RightObstacle, MiddleObstacle;
-    public Transform SpawnPos;
-    public float SpawnTime = 10f;
-    public float SpawnTimeMultiplyer; // для ускорения спавна со временем
-    public float ObstaclesSpeedMultiplyer; // для ускорения спавна со временем
-    public int ObstaclesCount;
-    public int StartDelay;
+    public GameObject LeftObstacle, RightObstacle, MiddleObstacle; // префабы препятствий
+    public Transform SpawnPos; // позиция спавна
+    public float SpawnTime = 10f; // начальное время между спавнами
+    public float SpawnTimeMultiplyer; // множитель для ускорения спавна
+    public float ObstaclesSpeedMultiplyer; // множитель для ускорения движения
+    public int ObstaclesCount; // сколько препятствий за волну
+    public int StartDelay; // задержка перед началом
 
-    public Transform ObstaclesParent;
+    public Transform ObstaclesParent; // родитель для препятствий
 
     private float timer;
-    private Queue<ObstacleType> spawnQueue = new Queue<ObstacleType>();
+    private Queue<ObstacleType> spawnQueue = new Queue<ObstacleType>(); // очередь типов препятствий
 
     private void Start()
     {
-        
-        StartCoroutine(StartGenerate(StartDelay));
+        StartCoroutine(StartGenerate(StartDelay)); // запускаем генерацию после задержки
     }
 
     IEnumerator StartGenerate(int WaitTime)
     {
         yield return new WaitForSeconds(WaitTime);
-        GenerateObstacleSequence(ObstaclesCount);
+        GenerateObstacleSequence(ObstaclesCount); // заполняем очередь
     }
 
     private void Update()
     {
         timer += Time.deltaTime;
+
+        // если пришло время и есть что спавнить
         if (timer >= SpawnTime && spawnQueue.Count > 0)
         {
             ObstacleType nextType = spawnQueue.Dequeue();
             SpawnObstacle(nextType);
             timer = 0f;
-            SpawnTime *= SpawnTimeMultiplyer;
+            SpawnTime *= SpawnTimeMultiplyer; // ускоряем спавн
         }
     }
 
@@ -45,7 +46,7 @@ public class ObstacleManager : MonoBehaviour
     {
         for (int i = 0; i < count; i++)
         {
-            ObstacleType randomType = (ObstacleType)Random.Range(0, 3);
+            ObstacleType randomType = (ObstacleType)Random.Range(0, 3); // случайный тип
             spawnQueue.Enqueue(randomType);
         }
     }
@@ -69,9 +70,9 @@ public class ObstacleManager : MonoBehaviour
 
         if (prefab != null)
         {
-            Transform SummonedObstacle = Instantiate(prefab, SpawnPos.position, Quaternion.identity).transform;
-            SummonedObstacle.SetParent(ObstaclesParent);
-            ObstaclesParent.GetComponent<MoveByDirection>().MoveSpeed *= ObstaclesSpeedMultiplyer;
+            Transform summonedObstacle = Instantiate(prefab, SpawnPos.position, Quaternion.identity).transform;
+            summonedObstacle.SetParent(ObstaclesParent);
+            ObstaclesParent.GetComponent<MoveByDirection>().MoveSpeed *= ObstaclesSpeedMultiplyer; // ускоряем движение
         }
     }
 
